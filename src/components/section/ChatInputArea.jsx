@@ -118,6 +118,7 @@ function ChatInputArea({ friendShipId, userId, ChatUserId }) {
             <div className="flex flex-col-reverse">
               {data.pages.map((page, i) => (
                 <ChatMsgArea
+                  key={i}
                   messages={page}
                   userId={userId}
                   ChatUserId={ChatUserId}
