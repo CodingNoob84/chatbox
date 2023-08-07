@@ -1,0 +1,82 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mongodb"
+  url      = env("DATABASE_URL")
+}
+
+model Account {
+  id                String  @id @default(cuid()) @map("_id")
+  userId            String
+  type              String
+  provider          String
+  providerAccountId String
+  refresh_token     String?
+  access_token      String?
+  expires_at        Int?
+  token_type        String?
+  scope             String?
+  id_token          String?
+  session_state     String?
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([provider, providerAccountId])
+}
+
+model Session {
+  id           String   @id @default(cuid()) @map("_id")
+  sessionToken String   @unique
+  userId       String
+  expires      DateTime
+  user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+model User {
+  id                  String     @id @default(cuid()) @map("_id")
+  name                String?
+  email               String?    @unique
+  emailVerified       DateTime?
+  image               String?
+  createdAt           DateTime   @default(now())
+  updatedAt           DateTime   @updatedAt
+  accounts            Account[]
+  sessions            Session[]
+  sentFriendships     Friends[]  @relation("FRsender") // Relationship to sent friendships
+  receivedFriendships Friends[]  @relation("FRreceiver") // Relationship to received friendships
+  sentMessages        Messages[] @relation("Msgsender")
+  receivedMessages    Messages[] @relation("Msgreceiver")
+}
+
+model Friends {
+  id         String     @id @default(cuid()) @map("_id")
+  createdAt  DateTime   @default(now())
+  updatedAt  DateTime   @updatedAt
+  type       String
+  sender     User?      @relation("FRsender", fields: [senderId], references: [id])
+  senderId   String?
+  receiver   User?      @relation("FRreceiver", fields: [receiverId], references: [id])
+  receiverId String?
+  Messages   Messages[] @relation("MsgFriendship")
+}
+
+model Messages {
+  id           String   @id @default(cuid()) @map("_id")
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+  msgtype      String
+  content      String
+  status       String
+  image        String?
+  sender       User?    @relation("Msgsender", fields: [senderId], references: [id])
+  senderId     String?
+  receiver     User?    @relation("Msgreceiver", fields: [receiverId], references: [id])
+  receiverId   String?
+  friends      Friends? @relation("MsgFriendship", fields: [friendshipId], references: [id])
+  friendshipId String?
+}
