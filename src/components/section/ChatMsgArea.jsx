@@ -3,7 +3,7 @@ import React, { useEffect, useRef } from "react";
 import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar";
 import { formatDateTime } from "@/helper/timehelper";
 
-function ChatMsgArea({ messages, userId, ChatUserId }) {
+function ChatMsgArea({ messages, userId, ChatUserId, key }) {
   console.log(messages);
   const messagesEndRef = useRef(null);
 
@@ -15,7 +15,7 @@ function ChatMsgArea({ messages, userId, ChatUserId }) {
     scrollToBottom();
   }, [messages]);
   return (
-    <>
+    <div key={key}>
       {messages.map((msg) =>
         msg.senderId === userId ? (
           <div key={msg.id} className="flex flex-row-reverse my-2">
@@ -38,7 +38,7 @@ function ChatMsgArea({ messages, userId, ChatUserId }) {
         )
       )}
       <div ref={messagesEndRef} />
-    </>
+    </div>
   );
 }
 
