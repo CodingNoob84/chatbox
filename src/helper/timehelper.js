@@ -32,7 +32,7 @@ export function formatDateTime(date) {
   const parsedDate = new Date(date);
 
   // Format the date as "3rd Aug 2023, 11:16AM" using the date-fns library
-  const formattedDate = format(parsedDate, "do MMM yyyy, h:mma");
+  const formattedDate = format(parsedDate, "dd MMM yyyy, h:mma");
 
   return formattedDate;
 }

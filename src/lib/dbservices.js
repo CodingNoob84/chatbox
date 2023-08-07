@@ -67,10 +67,11 @@ export async function CreateMessage(data) {
   }
 }
 
-export async function GetAllMessages(id) {
+export async function GetAllMessages(id, page) {
   try {
     if (id) {
-      const response = await axios.get(`/api/chat/${id}`);
+      const response = await axios.get(`/api/chat/${id}?page=${page}`);
+      console.log(response);
       return response.data;
     } else {
       return [];

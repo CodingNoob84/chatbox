@@ -4,6 +4,7 @@ import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar";
 import { formatDateTime } from "@/helper/timehelper";
 
 function ChatMsgArea({ messages, userId, ChatUserId }) {
+  console.log(messages);
   const messagesEndRef = useRef(null);
 
   const scrollToBottom = () => {
